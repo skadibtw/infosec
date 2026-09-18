@@ -1,0 +1,20 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lab1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -r requirements.txt bandit pip-audit
+      - name: SAST (bandit)
+        run: bandit -r . -x ./.venv
+      - name: SCA (pip-audit)
+        run: pip-audit -r requirements.txt

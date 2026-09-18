@@ -1,0 +1,5 @@
+Laboratornye_raboty_2026.pdf
+.DS_Store
+.venv/
+__pycache__/
+*.db
