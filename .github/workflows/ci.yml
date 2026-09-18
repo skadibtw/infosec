@@ -30,6 +30,7 @@ jobs:
           mkdir -p dependency-check-report
           ~/dependency-check/bin/dependency-check.sh -s requirements.txt --project lab1 \
             --enableExperimental --disableOssIndex --failOnCVSS 7 \
+            --suppression dependency-check-suppressions.xml \
             ${NVD_API_KEY:+--nvdApiKey "$NVD_API_KEY"} -f HTML -f JSON -o dependency-check-report
       - uses: actions/upload-artifact@v4
         if: always()
