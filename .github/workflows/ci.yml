@@ -22,8 +22,6 @@ jobs:
           key: dependency-check-${{ github.run_id }}
           restore-keys: dependency-check-
       - name: SCA (OWASP Dependency-Check)
-        env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
           curl -sL https://github.com/dependency-check/DependencyCheck/releases/download/v12.2.2/dependency-check-12.2.2-release.zip -o dc.zip
           unzip -q dc.zip -d ~
@@ -31,7 +29,7 @@ jobs:
           ~/dependency-check/bin/dependency-check.sh -s requirements.txt --project lab1 \
             --enableExperimental --disableOssIndex --failOnCVSS 7 \
             --suppression dependency-check-suppressions.xml \
-            ${NVD_API_KEY:+--nvdApiKey "$NVD_API_KEY"} -f HTML -f JSON -o dependency-check-report
+            --nvdDatafeed https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/ -f HTML -f JSON -o dependency-check-report
       - uses: actions/upload-artifact@v4
         if: always()
         with:
