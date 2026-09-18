@@ -1,6 +1,6 @@
 # Лабораторная работа 1: защищённый REST API с интеграцией в CI/CD
 
-REST API на Python/Flask с аутентификацией по JWT и хранением данных в SQLite. Пользователи публикуют короткие посты и читают их список. При каждом push и pull request в GitHub Actions автоматически запускаются проверки безопасности: SAST (bandit) и SCA (pip-audit).
+REST API на Python/Flask с аутентификацией по JWT и хранением данных в SQLite. Пользователи публикуют короткие посты и читают их список. При каждом push и pull request в GitHub Actions автоматически запускаются проверки безопасности: SAST (bandit) и SCA (OWASP Dependency-Check).
 
 ## Стек
 
@@ -8,7 +8,7 @@ REST API на Python/Flask с аутентификацией по JWT и хра�
 - SQLite (модуль `sqlite3` из стандартной библиотеки)
 - PyJWT: выпуск и проверка JWT
 - bcrypt: хэширование паролей
-- GitHub Actions: bandit, pip-audit
+- GitHub Actions: bandit, OWASP Dependency-Check
 
 ## Запуск
 
@@ -144,7 +144,7 @@ curl http://127.0.0.1:5000/api/data
 Workflow `.github/workflows/ci.yml` запускается на каждый `push` и `pull_request`:
 
 1. **SAST, [bandit](https://github.com/PyCQA/bandit).** Статический анализ исходного кода: ищет захардкоженные секреты, SQL, собранный конкатенацией строк, включённый debug, небезопасные вызовы и т.п.
-2. **SCA, [pip-audit](https://github.com/pypa/pip-audit).** Проверяет зависимости из `requirements.txt` по базе известных уязвимостей PyPI Advisory / OSV.
+2. **SCA, [OWASP Dependency-Check](https://github.com/dependency-check/DependencyCheck).** Анализирует `requirements.txt` (Python-анализатор включается флагом `--enableExperimental`), сопоставляет пакеты с CPE и ищет известные CVE в базе NVD. При уязвимости с CVSS ≥ 7 (`--failOnCVSS 7`) шаг падает. Отчёт в форматах HTML и JSON сохраняется как артефакт `dependency-check-report` запуска. База NVD кэшируется между запусками через `actions/cache`. Если в секретах репозитория задан `NVD_API_KEY`, он используется, и загрузка базы идёт быстрее.
 
 Если какой-либо сканер находит проблему, шаг завершается с ненулевым кодом, и pipeline падает.
 
@@ -154,6 +154,6 @@ Workflow `.github/workflows/ci.yml` запускается на каждый `pu
 
 ![bandit](screenshots/bandit.png)
 
-### Отчёт SCA (pip-audit)
+### Отчёт SCA (OWASP Dependency-Check)
 
-![pip-audit](screenshots/pip-audit.png)
+![dependency-check](screenshots/dependency-check.png)
