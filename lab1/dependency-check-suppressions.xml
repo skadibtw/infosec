@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+  <suppress>
+    <notes>Disputed CVE: HMAC key length is chosen by the application. app.py requires JWT_SECRET of at least 32 characters.</notes>
+    <packageUrl regex="true">^pkg:pypi/pyjwt@.*$</packageUrl>
+    <cve>CVE-2025-45770</cve>
+  </suppress>
+</suppressions>

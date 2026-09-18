@@ -10,6 +10,8 @@ from flask import Flask, g, jsonify, request
 
 app = Flask(__name__)
 SECRET = os.environ.get("JWT_SECRET") or os.urandom(32).hex()
+if len(SECRET) < 32:
+    raise RuntimeError("JWT_SECRET must be at least 32 characters")
 DB = os.environ.get("DB_PATH", "app.db")
 
 
