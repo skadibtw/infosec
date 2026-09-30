@@ -85,4 +85,4 @@ Dependency-check:
 
 ### Последний запуск пайплайна
 
-https://github.com/skadibtw/infosec/actions/runs/35853896287
+[https://github.com/skadibtw/infosec/actions/runs/35853896287](https://github.com/skadibtw/infosec/actions/runs/36703778685/job/109849106320)
